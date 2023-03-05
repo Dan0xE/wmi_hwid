@@ -3,6 +3,8 @@ name = "get_hwid"
 version = "0.1.0"
 edition = "2021"
 authors = ["Daniel <Dan0xE>"]
+description = "Get HWID of a Windows machine"
+license = "MIT"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
