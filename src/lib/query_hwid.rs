@@ -1,6 +1,6 @@
+use crate::structs::wmi_structs::*;
 use machineid_rs::HWIDComponent;
 use machineid_rs::{Encryption, IdBuilder};
-use serde::Deserialize;
 use std::collections::HashMap;
 use sysinfo::{CpuExt, System, SystemExt};
 use wmi::{COMLibrary, WMIConnection};
@@ -8,14 +8,6 @@ use wmi::{COMLibrary, WMIConnection};
 #[allow(non_snake_case)]
 
 pub(crate) fn query_hwid() {
-    #[derive(Deserialize, Debug)]
-    struct WMIProcess {
-        DeviceID: String,
-        Name: String,
-        Manufacturer: String,
-        Product: String,
-    }
-
     let mut system = System::new_all();
     system.refresh_all();
 
@@ -23,12 +15,6 @@ pub(crate) fn query_hwid() {
 
     let com_con = COMLibrary::new().unwrap();
     let wmi_con = WMIConnection::new(com_con.into()).unwrap();
-
-    #[derive(Deserialize, Debug)]
-    struct Win32_VideoController {
-        Name: String,
-        AdapterRAM: u64,
-    }
 
     for gpus in wmi_con
         .raw_query("SELECT * FROM Win32_VideoController")
@@ -40,14 +26,6 @@ pub(crate) fn query_hwid() {
         component_layout.insert("VRAM", gpus.AdapterRAM.to_string());
 
         break;
-    }
-
-    //get motherboard info with the wmi crate
-    #[derive(Deserialize, Debug)]
-    struct Win32_BaseBoard {
-        Manufacturer: String,
-        Product: String,
-        SerialNumber: String,
     }
 
     for motherboard in wmi_con.raw_query("SELECT * FROM Win32_BaseBoard").unwrap() {
@@ -68,10 +46,6 @@ pub(crate) fn query_hwid() {
     }
 
     //get ram info with the wmi crate
-    #[derive(Deserialize, Debug)]
-    struct Win32_PhysicalMemory {
-        Capacity: u64,
-    }
 
     let mut total_ram = 0;
     for ram in wmi_con
@@ -83,13 +57,6 @@ pub(crate) fn query_hwid() {
     }
 
     component_layout.insert("RAM", total_ram.to_string());
-
-    //get disk info with the wmi crate
-    #[derive(Deserialize, Debug)]
-    struct Win32_DiskDrive {
-        Model: String,
-        SerialNumber: String,
-    }
 
     for disk in wmi_con.raw_query("SELECT * FROM Win32_DiskDrive").unwrap() {
         let disk: Win32_DiskDrive = disk;
@@ -115,14 +82,6 @@ pub(crate) fn query_hwid() {
         "Hostname",
         system.host_name().unwrap_or_else(|| "unknown".to_string()),
     );
-
-    //get bios info with the wmi crate
-    #[derive(Deserialize, Debug)]
-    struct Win32_BIOS {
-        Manufacturer: String,
-        Version: String,
-        SerialNumber: String,
-    }
 
     for bios in wmi_con.raw_query("SELECT * FROM Win32_BIOS").unwrap() {
         let bios: Win32_BIOS = bios;
