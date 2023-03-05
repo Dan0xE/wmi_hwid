@@ -8,7 +8,8 @@ use wmi::{COMLibrary, WMIConnection};
 
 /**
 * ### This function queries the hardware id of the system and returns a string with the information
-* ### The string contains the following information:
+  ### ``` Key: The key that is used to build an unique id using the machineid_rs crate ```
+* ### The returned string contains the following information:
 * ++++```
 * BIOSManufacturer: Manufacturer of the BIOS
 * OS: Operating System
@@ -41,7 +42,7 @@ use wmi::{COMLibrary, WMIConnection};
            "RPC_E_WRONG_THREAD - This error occurs when you call CoInitializeEx from a thread that is already initialized."
 * ++++```
 */
-pub(crate) fn query_hwid() -> Result<String, Box<dyn std::error::Error>> {
+pub(crate) fn query_hwid(key: &str) -> Result<String, Box<dyn std::error::Error>> {
     let mut system = System::new_all();
     system.refresh_all();
 
@@ -134,7 +135,7 @@ pub(crate) fn query_hwid() -> Result<String, Box<dyn std::error::Error>> {
         .add_component(HWIDComponent::CPUCores);
 
     //we get the unique id
-    let id = builder.build("yourkeyhere");
+    let id = builder.build(&key);
 
     component_layout.insert("ID", id.unwrap().to_string());
 
