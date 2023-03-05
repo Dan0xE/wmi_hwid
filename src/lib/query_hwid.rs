@@ -41,7 +41,7 @@ use wmi::{COMLibrary, WMIConnection};
            "RPC_E_WRONG_THREAD - This error occurs when you call CoInitializeEx from a thread that is already initialized."
 * ++++```
 */
-fn query_hwid() -> Result<String, Box<dyn std::error::Error>> {
+pub(crate) fn query_hwid() -> Result<String, Box<dyn std::error::Error>> {
     let mut system = System::new_all();
     system.refresh_all();
 
