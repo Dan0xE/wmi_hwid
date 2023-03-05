@@ -6,7 +6,7 @@ use std::collections::HashMap;
 use sysinfo::{CpuExt, System, SystemExt};
 use wmi::{COMLibrary, WMIConnection};
 
-pub(crate) fn query_hwid() {
+pub(crate) fn query_hwid() -> String {
     let mut system = System::new_all();
     system.refresh_all();
 
@@ -107,5 +107,7 @@ pub(crate) fn query_hwid() {
     for (key, value) in &component_layout {
         component_layout_string.push_str(&format!("{}: {}\n", key, value));
     }
-    println!("{:#?}", component_layout);
+    // println!("{:#?}", component_layout);
+
+    return component_layout_string;
 }
