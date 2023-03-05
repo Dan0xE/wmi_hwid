@@ -8,8 +8,8 @@ edition = "2021"
 [dependencies]
 windows = "0.44.0"
 winapi = { version = "0.3.9", features = ["winnt", "debugapi"] }
-wmi = "0.11.4"
+wmi = "0.12.0"
 serde_json = "1.0"
 serde = { version = "1.0", features = ["derive"] }
 machineid-rs = "1.2.2"
-sysinfo = "0.27.5"
+sysinfo = "0.28.2"

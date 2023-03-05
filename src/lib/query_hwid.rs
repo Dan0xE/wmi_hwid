@@ -1,11 +1,10 @@
+#[allow(non_snake_case)]
 use crate::structs::wmi_structs::*;
 use machineid_rs::HWIDComponent;
 use machineid_rs::{Encryption, IdBuilder};
 use std::collections::HashMap;
 use sysinfo::{CpuExt, System, SystemExt};
 use wmi::{COMLibrary, WMIConnection};
-
-#[allow(non_snake_case)]
 
 pub(crate) fn query_hwid() {
     let mut system = System::new_all();
