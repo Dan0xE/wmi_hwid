@@ -7,7 +7,5 @@ mod structs {
 }
 
 fn main() {
-    lib::query_hwid::query_hwid().unwrap();
-    //print lib::query_hwid::query_hwid().unwrap();
-    println!("{:#?}", lib::query_hwid::query_hwid().unwrap());
+    lib::query_hwid::query_hwid("yourkey").unwrap();
 }
