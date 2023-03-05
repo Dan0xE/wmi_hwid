@@ -6,7 +6,42 @@ use std::collections::HashMap;
 use sysinfo::{CpuExt, System, SystemExt};
 use wmi::{COMLibrary, WMIConnection};
 
-pub(crate) fn query_hwid() -> String {
+/**
+* ### This function queries the hardware id of the system and returns a string with the information
+* ### The string contains the following information:
+* ++++```
+* BIOSManufacturer: Manufacturer of the BIOS
+* OS: Operating System
+* RAM: Amount of RAM in bytes
+* BIOSSerial: Serial number of the BIOS
+* CPU: CPU Brand and Model
+* HOSTNAME: Hostname of the system
+* Motherboard: Motherboard Model
+* OSVersion: Operating System Version
+* OSBuild: Operating System Build
+* GPU: GPU Brand and Model
+* BIOS: BIOS Version
+* DISK: Disk Model
+* MANUFACTURER: Manufacturer of the system
+* ID: Unique ID of the system
+* DISKSERIAL: Serial number of the disk
+* SERIALNUMBER: Serial number of the motherboard
+* FREQUENCY: CPU Frequency
+* VRAM: VRAM in bytes
+*
+* ## Erros that can be returned:
+* "An Error occured, this might be because you called the function twice, but wmi cannot initialize twice."
+           "Also, calling this from WRY will not work, try calling it before creating an event loop."
+           "For more Information and incase you want to lookup the HINSTANCE Error code, visit: https://docs.microsoft.com/en-us/windows/win32/com/com-error-codes "
+           "Common Error codes are:"
+           "-2147221164: RPC_E_CHANGED_MODE - This error occurs when you call CoInitializeEx from a thread that is already initialized with a different concurrency model."
+           "-2147221163: RPC_E_CANTCALLOUT_ININPUTSYNCCALL - This error occurs when you call an outgoing call while inside an input-synchronous call."
+           "-2147417831 RPC_E_TOO_LATE - This error occurs when you call CoInitializeEx after the COM library has already been initialized."
+           "RPC_E_NO_GOOD_SECURITY_PACKAGES - This error occurs when you call CoInitializeSecurity without specifying authentication services."
+           "RPC_E_WRONG_THREAD - This error occurs when you call CoInitializeEx from a thread that is already initialized."
+* ++++```
+*/
+fn query_hwid() -> Result<String, Box<dyn std::error::Error>> {
     let mut system = System::new_all();
     system.refresh_all();
 
@@ -109,5 +144,5 @@ pub(crate) fn query_hwid() -> String {
     }
     // println!("{:#?}", component_layout);
 
-    return component_layout_string;
+    return Ok(component_layout_string);
 }
